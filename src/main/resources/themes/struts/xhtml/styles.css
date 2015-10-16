@@ -1,0 +1,7 @@
+.label {font-style:italic; }
+.errorLabel {font-style:italic; color:red; }
+.errorMessage {font-weight:bold; color:red; }
+.checkboxLabel {color:green;}
+.checkboxErrorLabel {color:red; }
+.required {color:red;}
+.tdLabel {text-align:right; vertical-align:top; }

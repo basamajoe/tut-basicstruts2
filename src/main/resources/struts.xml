@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.ui.theme" value="KUTheme" />
+
+	<package name="basicstruts2" extends="struts-default">
+
+		<interceptors>
+			<interceptor name="simple" class="org.apache.struts.register.interceptor.SimpleInterceptor" />
+		</interceptors>
+
+		<global-results>
+			<result name="securityerror">/securityerror.jsp</result>
+			<result name="error">/error.jsp</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping
+				exception="org.apache.struts.register.exceptions.SecurityBreachException"
+				result="securityerror" />
+			<exception-mapping exception="java.lang.Exception"
+				result="error" />
+		</global-exception-mappings>
+
+		<!-- If no class attribute is specified the framework will assume success 
+			and render the result index.jsp -->
+		<!-- If no name value for the result node is specified the success value 
+			is the default -->
+		<action name="index">
+			<result>/index.jsp</result>
+		</action>
+
+		<action name="edit" class="org.apache.struts.edit.action.EditAction"
+			method="input">
+			<result name="input">/edit.jsp</result>
+		</action>
+
+		<action name="save" class="org.apache.struts.edit.action.EditAction"
+			method="execute">
+			<result name="input">/edit.jsp</result>
+			<result name="success">/thankyou.jsp</result>
+		</action>
+
+		<action name="actionspecificexception" class="org.apache.struts.register.action.Register"
+			method="throwSecurityException">
+			<exception-mapping
+				exception="org.apache.struts.register.exceptions.SecurityBreachException"
+				result="login" />
+			<result>/register.jsp</result>
+			<result name="login">/login.jsp</result>
+		</action>
+
+		<!-- If the URL is hello.action the call the execute method of class HelloWorldAction. 
+			If the result returned by the execute method is success render the HelloWorld.jsp -->
+		<action name="hello"
+			class="org.apache.struts.helloworld.action.HelloWorldAction" method="execute">
+			<result name="success">/helloworld.jsp</result>
+		</action>
+
+		<action name="register" class="org.apache.struts.register.action.Register"
+			method="execute">
+			<interceptor-ref name="timer" />
+			<interceptor-ref name="logger" />
+			<interceptor-ref name="simple" />
+			<interceptor-ref name="defaultStack">
+				<param name="exception.logEnabled">true</param>
+				<param name="exception.logLevel">ERROR</param>
+			</interceptor-ref>
+			<result name="success">/thankyou.jsp</result>
+			<result name="input">/register.jsp</result>
+		</action>
+
+		<action name="registerInput" class="org.apache.struts.register.action.Register"
+			method="input">
+			<result name="input">/register.jsp</result>
+		</action>
+
+		<!-- Whatever value is before Person for the name of the action will be 
+			the name of the method to call in class PersonAction. For example action 
+			createPerson will call a method named create in class PersonAction -->
+		<action name="*Person"
+			class="org.apache.struts.tutorials.wildcardmethod.action.PersonAction"
+			method="{1}">
+			<result name="success">view.jsp</result>
+			<result name="input">input.jsp</result>
+		</action>
+
+	</package>
+
+</struts>
